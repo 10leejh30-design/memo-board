@@ -6,317 +6,215 @@
 <title>익명 메모 보드</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Italianno&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --g1: #dde0d4; --g2: #a8bc96; --g3: #4e8060; --g4: #2d6b4a; --g5: #1e4a32;
+  --cream: #f4f6f0; --text: #1e4a32; --header: rgba(30,74,50,0.96);
+}
 
-  :root {
-    --cork: #a8bc96;
-    --cork-dark: #2d6b4a;
-    --cork-deep: rgba(30,74,50,0.96);
-    --yellow: #dde0d4;
-    --yellow-shadow: #4e8060;
-    --cream: #f4f6f0;
-    --text-dark: #1e4a32;
-  }
+body {
+  height: 100vh; overflow: hidden;
+  background-color: var(--g2);
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(78,128,96,0.5) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(45,107,74,0.4) 0%, transparent 50%);
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex; flex-direction: column;
+}
 
-  body {
-    height: 100vh;
-    overflow: hidden;
-    background-color: #a8bc96;
-    background-image:
-      radial-gradient(ellipse at 20% 30%, rgba(78,128,96,0.5) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 70%, rgba(45,107,74,0.4) 0%, transparent 50%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%2398ac86'/%3E%3Ccircle cx='1' cy='1' r='0.8' fill='%2388a076' opacity='0.3'/%3E%3C/svg%3E");
-    font-family: 'Noto Sans KR', sans-serif;
-    display: flex;
-    flex-direction: column;
-  }
+/* ── Header ── */
+.board-header {
+  background: var(--header); color: #f0f4ee;
+  padding: 11px 22px; display: flex; align-items: center;
+  justify-content: space-between; border-bottom: 3px solid var(--g4);
+  gap: 12px; flex-shrink: 0; flex-wrap: wrap;
+}
+.board-title { font-size: 18px; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 7px; }
+.header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-  /* ── Header ── */
-  .board-header {
-    background: var(--cork-deep);
-    color: #f5e8c8;
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 3px solid var(--cork-dark);
-    gap: 12px;
-    flex-shrink: 0;
-    flex-wrap: wrap;
-  }
+.btn-write {
+  background: var(--g1); color: var(--text); border: none;
+  padding: 7px 16px; border-radius: 3px; font-family: inherit;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  box-shadow: 2px 3px 0 var(--g3); transition: all 0.15s;
+}
+.btn-write:hover { transform: translateY(-1px); box-shadow: 3px 4px 0 var(--g3); }
+.btn-write:active { transform: translateY(1px); box-shadow: 1px 1px 0 var(--g3); }
 
-  .board-title {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 26px;
-    color: #f5e8c8;
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+.cat-filter { display: flex; gap: 5px; }
+.cat-btn {
+  background: rgba(255,255,255,0.14); color: #f0f4ee;
+  border: 1.5px solid rgba(255,255,255,0.28);
+  padding: 4px 12px; border-radius: 20px;
+  font-family: inherit; font-size: 12px; cursor: pointer; transition: all 0.15s;
+}
+.cat-btn:hover, .cat-btn.active { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.6); color: #fff; }
+.count-badge { background: rgba(255,255,255,0.2); border-radius: 10px; padding: 1px 6px; font-size: 11px; margin-left: 3px; }
 
-  .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+/* ── Board ── */
+.board-area { flex: 1; overflow-y: auto; padding: 24px 22px; scrollbar-width: thin; scrollbar-color: rgba(30,74,50,0.3) transparent; }
+.notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 32px 20px; align-items: start; }
 
-  .btn-write {
-    background: var(--yellow);
-    color: var(--text-dark);
-    border: none;
-    padding: 8px 18px;
-    border-radius: 3px;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 2px 3px 0 var(--yellow-shadow);
-    transition: all 0.15s;
-  }
-  .btn-write:hover { transform: translateY(-1px); box-shadow: 3px 4px 0 var(--yellow-shadow); }
-  .btn-write:active { transform: translateY(1px); box-shadow: 1px 1px 0 var(--yellow-shadow); }
+/* ── Note group ── */
+.note-group { display: flex; flex-direction: column; gap: 0; }
 
-  .cat-filter { display: flex; gap: 6px; }
-  .cat-btn {
-    background: rgba(255,255,255,0.15);
-    color: #f5e8c8;
-    border: 1.5px solid rgba(255,255,255,0.3);
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-family: inherit;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .cat-btn:hover, .cat-btn.active {
-    background: rgba(255,255,255,0.28);
-    border-color: rgba(255,255,255,0.6);
-    color: #fff;
-  }
-  .count-badge {
-    background: rgba(255,255,255,0.2);
-    border-radius: 10px;
-    padding: 1px 7px;
-    font-size: 11px;
-    margin-left: 4px;
-  }
+/* ── Note card ── */
+.note {
+  position: relative; padding: 18px 15px 12px;
+  border-radius: 2px; min-height: 148px;
+  box-shadow: 3px 5px 14px rgba(0,0,0,0.22);
+  word-break: break-word;
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: noteIn 0.3s cubic-bezier(.22,.68,0,1.2) both;
+}
+.note:hover { box-shadow: 5px 9px 22px rgba(0,0,0,0.28); z-index: 10; }
+@keyframes noteIn { from { opacity:0; transform:scale(0.88) translateY(10px); } to { opacity:1; } }
 
-  /* ── Board area ── */
-  .board-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 28px 24px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(80,50,20,0.35) transparent;
-  }
+/* ── Reply card ── */
+.reply-card {
+  position: relative; margin-top: 6px; margin-left: 18px;
+  padding: 12px 14px 10px; border-radius: 2px; min-height: 80px;
+  box-shadow: 2px 4px 10px rgba(0,0,0,0.18); word-break: break-word;
+  animation: noteIn 0.3s cubic-bezier(.22,.68,0,1.2) both;
+}
+.reply-card::before {
+  content: ''; position: absolute; left: -14px; top: 18px;
+  width: 10px; height: 2px; background: rgba(30,74,50,0.3);
+}
 
-  .notes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    gap: 26px 22px;
-    align-items: start;
-  }
+.note-pin {
+  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+  width: 16px; height: 16px; border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.38), inset 0 1px 2px rgba(255,255,255,0.4); z-index: 2;
+}
+.note-pin::after {
+  content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+  width: 3px; height: 6px; background: rgba(0,0,0,0.2); border-radius: 0 0 2px 2px;
+}
 
-  /* ── Note card ── */
-  .note {
-    position: relative;
-    padding: 20px 16px 14px;
-    border-radius: 2px;
-    min-height: 155px;
-    box-shadow: 3px 5px 14px rgba(0,0,0,0.22);
-    word-break: break-word;
-    transition: transform 0.2s, box-shadow 0.2s;
-    animation: noteIn 0.32s cubic-bezier(.22,.68,0,1.2) both;
-  }
-  .note:hover { box-shadow: 5px 9px 22px rgba(0,0,0,0.3); z-index: 10; }
+.note-cat-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-bottom: 6px; }
+.reply-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 10px; margin-bottom: 5px; background: rgba(30,74,50,0.12); color: var(--g5); }
 
-  @keyframes noteIn {
-    from { opacity: 0; transform: scale(0.88) translateY(10px); }
-    to   { opacity: 1; }
-  }
+.note-text { font-size: 14px; font-weight: 600; line-height: 1.65; color: rgba(0,0,0,0.75); margin-bottom: 8px; min-height: 44px; }
+.reply-text { font-size: 13px; font-weight: 500; line-height: 1.6; color: rgba(0,0,0,0.7); margin-bottom: 6px; }
 
-  .note-pin {
-    position: absolute;
-    top: -12px; left: 50%;
-    transform: translateX(-50%);
-    width: 17px; height: 17px;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.4);
-    z-index: 2;
-  }
-  .note-pin::after {
-    content: '';
-    position: absolute;
-    bottom: -6px; left: 50%;
-    transform: translateX(-50%);
-    width: 3px; height: 7px;
-    background: rgba(0,0,0,0.22);
-    border-radius: 0 0 2px 2px;
-  }
+.note-stars { display: flex; gap: 2px; margin-bottom: 6px; }
+.star { font-size: 13px; }
+.star.filled { color: var(--g4); }
+.star.empty  { color: rgba(0,0,0,0.16); }
 
-  .note-cat-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
-  }
+.note-footer {
+  font-size: 10px; color: rgba(0,0,0,0.34);
+  border-top: 1px dashed rgba(0,0,0,0.12); padding-top: 5px;
+  display: flex; justify-content: space-between; align-items: center; gap: 4px;
+}
+.note-actions { display: flex; gap: 4px; }
+.note-actions button {
+  background: rgba(0,0,0,0.07); border: none; border-radius: 3px;
+  font-size: 10px; padding: 2px 6px; cursor: pointer;
+  color: rgba(0,0,0,0.5); font-family: inherit; transition: background 0.15s;
+}
+.note-actions button:hover { background: rgba(0,0,0,0.14); }
+.note-actions button.reply-btn { background: rgba(45,107,74,0.12); color: var(--g4); }
+.note-actions button.reply-btn:hover { background: rgba(45,107,74,0.22); }
+.note-actions button.del-btn { background: rgba(180,50,50,0.08); color: rgba(160,40,40,0.7); }
+.note-actions button.del-btn:hover { background: rgba(180,50,50,0.18); }
 
-  .note-text {
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1.65;
-    color: rgba(0,0,0,0.76);
-    margin-bottom: 10px;
-    min-height: 52px;
-  }
+.note-fold { position: absolute; bottom: 0; right: 0; width: 18px; height: 18px; overflow: hidden; pointer-events: none; }
+.note-fold::before { content: ''; position: absolute; bottom: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 0 18px 18px; border-color: transparent transparent rgba(0,0,0,0.09) transparent; }
 
-  .note-stars { display: flex; gap: 2px; margin-bottom: 8px; }
-  .star { font-size: 14px; }
-  .star.filled { color: #2d6b4a; }
-  .star.empty  { color: rgba(0,0,0,0.18); }
+.empty-state { text-align: center; padding: 60px 20px; color: rgba(30,74,50,0.45); font-size: 17px; grid-column: 1/-1; line-height: 1.9; }
+.status-msg { text-align: center; padding: 60px 20px; color: rgba(30,74,50,0.45); font-size: 15px; grid-column: 1/-1; }
 
-  .note-footer {
-    font-size: 11px;
-    color: rgba(0,0,0,0.36);
-    text-align: right;
-    border-top: 1px dashed rgba(0,0,0,0.13);
-    padding-top: 5px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
+/* ── Modal base ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 200;
+  align-items: center; justify-content: center; padding: 16px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--cream); border-radius: 3px; padding: 26px 22px 20px;
+  width: 100%; max-width: 400px;
+  box-shadow: 0 14px 44px rgba(0,0,0,0.35), 3px 4px 0 var(--g3);
+  position: relative; animation: modalIn 0.2s cubic-bezier(.22,.68,0,1.15) both;
+}
+@keyframes modalIn { from { opacity:0; transform:scale(0.92) translateY(14px); } to { opacity:1; transform:none; } }
 
-  .note-fold {
-    position: absolute; bottom: 0; right: 0;
-    width: 20px; height: 20px; overflow: hidden; pointer-events: none;
-  }
-  .note-fold::before {
-    content: ''; position: absolute; bottom: 0; right: 0;
-    width: 0; height: 0; border-style: solid;
-    border-width: 0 0 20px 20px;
-    border-color: transparent transparent rgba(0,0,0,0.1) transparent;
-  }
+.modal h2 { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+.modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; font-size: 19px; cursor: pointer; color: var(--g3); }
 
-  .empty-state {
-    text-align: center;
-    padding: 70px 20px;
-    color: rgba(80,50,20,0.45);
-    font-size: 18px;
-    grid-column: 1 / -1;
-    line-height: 1.9;
-  }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 12px; font-weight: 700; color: var(--g4); margin-bottom: 4px; }
 
-  /* ── Loading / Error ── */
-  .status-msg {
-    text-align: center;
-    padding: 60px 20px;
-    color: rgba(80,50,20,0.5);
-    font-size: 16px;
-    grid-column: 1 / -1;
-  }
+.cat-select { display: flex; gap: 7px; }
+.cat-select button {
+  flex: 1; padding: 7px; border: 2px solid var(--g2);
+  background: transparent; border-radius: 3px; font-family: inherit;
+  font-size: 13px; cursor: pointer; color: var(--g4); transition: all 0.15s;
+}
+.cat-select button.selected { background: var(--g1); border-color: var(--g3); color: var(--text); font-weight: 700; }
 
-  /* ── Modal ── */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.52);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
-  .modal-overlay.open { display: flex; }
+.nick-row { display: flex; gap: 7px; }
+.nick-toggle { display: flex; gap: 5px; flex-shrink: 0; }
+.nick-toggle button {
+  padding: 5px 10px; border: 1.5px solid var(--g2); background: transparent;
+  border-radius: 3px; font-family: inherit; font-size: 12px; cursor: pointer;
+  color: var(--g4); transition: all 0.15s; white-space: nowrap;
+}
+.nick-toggle button.selected { background: var(--g1); border-color: var(--g3); font-weight: 700; }
 
-  .modal {
-    background: var(--cream);
-    border-radius: 3px;
-    padding: 28px 24px 22px;
-    width: 100%; max-width: 400px;
-    box-shadow: 0 14px 44px rgba(0,0,0,0.38), 3px 4px 0 var(--yellow-shadow);
-    position: relative;
-    animation: modalIn 0.22s cubic-bezier(.22,.68,0,1.15) both;
-  }
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.92) translateY(16px); }
-    to   { opacity: 1; transform: none; }
-  }
+.input-row { display: flex; gap: 7px; }
 
-  .modal h2 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 18px;
-  }
-  .modal-close {
-    position: absolute; top: 12px; right: 16px;
-    background: none; border: none;
-    font-size: 20px; cursor: pointer;
-    color: #4e8060; line-height: 1;
-  }
+input[type=text], input[type=password] {
+  width: 100%; padding: 7px 10px; border: 1.5px solid var(--g2); border-radius: 3px;
+  font-family: inherit; font-size: 13px; color: var(--text);
+  background: rgba(255,255,255,0.65); outline: none; transition: border-color 0.15s;
+}
+input[type=text]:focus, input[type=password]:focus { border-color: var(--g3); }
+input[type=password] { letter-spacing: 3px; }
 
-  .field { margin-bottom: 14px; }
-  .field label {
-    display: block; font-size: 13px; font-weight: 700;
-    color: #2d6b4a; margin-bottom: 5px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
+.star-picker { display: flex; gap: 4px; font-size: 24px; cursor: pointer; margin-top: 2px; }
+.star-picker span { transition: transform 0.1s; color: var(--g2); user-select: none; }
+.star-picker span:hover { transform: scale(1.2); }
+.star-picker span.selected { color: var(--g4); }
 
-  .cat-select { display: flex; gap: 8px; }
-  .cat-select button {
-    flex: 1; padding: 8px;
-    border: 2px solid #a8bc96;
-    background: transparent; border-radius: 3px;
-    font-family: inherit; font-size: 14px;
-    cursor: pointer; color: #2d6b4a; transition: all 0.15s;
-  }
-  .cat-select button.selected {
-    background: var(--yellow); border-color: var(--yellow-shadow);
-    color: var(--text-dark); font-weight: 700;
-  }
+textarea {
+  width: 100%; height: 95px; border: 1.5px solid var(--g2); border-radius: 3px;
+  padding: 8px 10px; font-family: inherit; font-size: 14px; font-weight: 600;
+  color: var(--text); background: rgba(255,255,255,0.65);
+  resize: none; outline: none; transition: border-color 0.15s;
+}
+textarea:focus { border-color: var(--g3); }
+textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
+.char-count { text-align: right; font-size: 11px; color: rgba(30,74,50,0.4); margin-top: 3px; }
 
-  .star-picker { display: flex; gap: 5px; font-size: 26px; cursor: pointer; margin-top: 3px; }
-  .star-picker span { transition: transform 0.1s; color: #a8bc96; user-select: none; }
-  .star-picker span:hover { transform: scale(1.2); }
-  .star-picker span.selected { color: #2d6b4a; }
+.btn-submit {
+  width: 100%; padding: 10px; background: var(--g4); color: #f0f4ee;
+  border: none; border-radius: 3px; font-family: inherit; font-size: 14px;
+  font-weight: 700; cursor: pointer; box-shadow: 2px 3px 0 var(--g5);
+  transition: all 0.15s; margin-top: 4px;
+}
+.btn-submit:hover { transform: translateY(-1px); box-shadow: 3px 4px 0 var(--g5); }
+.btn-submit:active { transform: translateY(1px); box-shadow: 1px 1px 0 var(--g5); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  textarea {
-    width: 100%; height: 100px;
-    border: 1.5px solid #a8bc96; border-radius: 3px;
-    padding: 9px 11px;
-    font-family: inherit; font-size: 15px; font-weight: 700;
-    color: var(--text-dark);
-    background: rgba(255,255,255,0.6);
-    resize: none; outline: none; transition: border-color 0.15s;
-  }
-  textarea:focus { border-color: #2d6b4a; }
-  textarea::placeholder { color: rgba(90,60,20,0.3); font-weight: 400; }
-  .char-count { text-align: right; font-size: 11px; color: rgba(90,60,20,0.4); margin-top: 3px; }
+.error-msg { font-size: 12px; color: #b83232; margin-top: 6px; display: none; }
+.error-msg.show { display: block; }
 
-  .btn-submit {
-    width: 100%; padding: 11px;
-    background: var(--yellow); color: var(--text-dark);
-    border: none; border-radius: 3px;
-    font-family: inherit; font-size: 15px; font-weight: 700;
-    cursor: pointer;
-    box-shadow: 2px 3px 0 var(--yellow-shadow);
-    transition: all 0.15s; margin-top: 2px;
-  }
-  .btn-submit:hover { transform: translateY(-1px); box-shadow: 3px 4px 0 var(--yellow-shadow); }
-  .btn-submit:active { transform: translateY(1px); box-shadow: 1px 1px 0 var(--yellow-shadow); }
-  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-  /* ── Toast ── */
-  .toast {
-    position: fixed; bottom: 24px; left: 50%;
-    transform: translateX(-50%) translateY(16px);
-    background: rgba(60,35,10,0.92); color: #f5e8c8;
-    padding: 10px 24px; border-radius: 30px;
-    font-family: 'Noto Sans KR', sans-serif; font-size: 14px;
-    opacity: 0; transition: all 0.3s; z-index: 300;
-    white-space: nowrap; pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 22px; left: 50%;
+  transform: translateX(-50%) translateY(14px);
+  background: rgba(30,74,50,0.92); color: #f0f4ee;
+  padding: 9px 22px; border-radius: 30px;
+  font-size: 13px; opacity: 0; transition: all 0.3s;
+  z-index: 300; white-space: nowrap; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -329,7 +227,7 @@
       <button class="cat-btn"        data-filter="review"  onclick="setFilter('review')">⭐ 리뷰 <span class="count-badge" id="cnt-review">0</span></button>
       <button class="cat-btn"        data-filter="request" onclick="setFilter('request')">💬 요청사항 <span class="count-badge" id="cnt-request">0</span></button>
     </div>
-    <button class="btn-write" onclick="openModal()">✏️ 메모 쓰기</button>
+    <button class="btn-write" onclick="openModal('writeModal')">✏️ 메모 쓰기</button>
   </div>
 </header>
 
@@ -339,10 +237,10 @@
   </div>
 </div>
 
-<!-- Write modal -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeIfOutside(event)">
+<!-- ── 메모 작성 모달 ── -->
+<div class="modal-overlay" id="writeModal" onclick="closeIfOutside(event,'writeModal')">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
+    <button class="modal-close" onclick="closeModal('writeModal')">✕</button>
     <h2>📝 메모 남기기</h2>
     <div class="field">
       <label>카테고리</label>
@@ -352,185 +250,398 @@
       </div>
     </div>
     <div class="field" id="starsField">
-      <label>별점 <span id="starLabel" style="color:#4e8060;font-size:12px;">(선택 안 함)</span></label>
+      <label>별점 <span id="starLabel" style="color:var(--g3);font-size:11px;">(선택 안 함)</span></label>
       <div class="star-picker" id="starPicker">
-        <span onclick="setStar(1)">★</span>
-        <span onclick="setStar(2)">★</span>
-        <span onclick="setStar(3)">★</span>
-        <span onclick="setStar(4)">★</span>
+        <span onclick="setStar(1)">★</span><span onclick="setStar(2)">★</span>
+        <span onclick="setStar(3)">★</span><span onclick="setStar(4)">★</span>
         <span onclick="setStar(5)">★</span>
       </div>
+    </div>
+    <div class="field">
+      <label>작성자</label>
+      <div class="nick-row">
+        <div class="nick-toggle">
+          <button id="btn-anon" class="selected" onclick="selectNick('anon')">익명</button>
+          <button id="btn-nick"                  onclick="selectNick('nick')">닉네임</button>
+        </div>
+        <input type="text" id="nickInput" placeholder="닉네임 입력" maxlength="10" style="display:none">
+      </div>
+    </div>
+    <div class="field">
+      <label>비밀번호 (숫자 4자리) — 수정·삭제 시 사용</label>
+      <input type="password" id="pwInput" placeholder="0000" maxlength="4" inputmode="numeric">
     </div>
     <div class="field">
       <label>내용</label>
       <textarea id="noteText" placeholder="익명으로 남기는 메모예요 :)" maxlength="200" oninput="updateChar()"></textarea>
       <div class="char-count"><span id="charCount">0</span>/200</div>
     </div>
+    <div class="error-msg" id="writeError"></div>
     <button class="btn-submit" id="submitBtn" onclick="submitNote()">📌 붙이기</button>
+  </div>
+</div>
+
+<!-- ── 답글 모달 ── -->
+<div class="modal-overlay" id="replyModal" onclick="closeIfOutside(event,'replyModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('replyModal')">✕</button>
+    <h2>💬 답글 달기</h2>
+    <div class="field">
+      <label>작성자</label>
+      <div class="nick-row">
+        <div class="nick-toggle">
+          <button id="rbtn-anon" class="selected" onclick="selectReplyNick('anon')">익명</button>
+          <button id="rbtn-nick"                  onclick="selectReplyNick('nick')">닉네임</button>
+        </div>
+        <input type="text" id="replyNickInput" placeholder="닉네임 입력" maxlength="10" style="display:none">
+      </div>
+    </div>
+    <div class="field">
+      <label>비밀번호 (숫자 4자리)</label>
+      <input type="password" id="replyPwInput" placeholder="0000" maxlength="4" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label>내용</label>
+      <textarea id="replyText" placeholder="답글을 입력하세요" maxlength="200" oninput="updateReplyChar()"></textarea>
+      <div class="char-count"><span id="replyCharCount">0</span>/200</div>
+    </div>
+    <div class="error-msg" id="replyError"></div>
+    <button class="btn-submit" id="replySubmitBtn" onclick="submitReply()">💬 답글 달기</button>
+  </div>
+</div>
+
+<!-- ── 비번 확인 모달 ── -->
+<div class="modal-overlay" id="authModal" onclick="closeIfOutside(event,'authModal')">
+  <div class="modal" style="max-width:320px">
+    <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+    <h2 id="authTitle">🔑 확인</h2>
+    <div class="field">
+      <label>비밀번호 입력</label>
+      <input type="password" id="authPwInput" placeholder="0000" maxlength="4" inputmode="numeric"
+        onkeydown="if(event.key==='Enter') confirmAuth()">
+    </div>
+    <div class="error-msg" id="authError"></div>
+    <button class="btn-submit" onclick="confirmAuth()">확인</button>
+  </div>
+</div>
+
+<!-- ── 수정 모달 ── -->
+<div class="modal-overlay" id="editModal" onclick="closeIfOutside(event,'editModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+    <h2>✏️ 메모 수정</h2>
+    <div class="field">
+      <label>내용</label>
+      <textarea id="editText" maxlength="200" oninput="updateEditChar()"></textarea>
+      <div class="char-count"><span id="editCharCount">0</span>/200</div>
+    </div>
+    <div class="error-msg" id="editError"></div>
+    <button class="btn-submit" id="editSubmitBtn" onclick="submitEdit()">✏️ 수정 완료</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  // ═══════════════════════════════════════════════
-  //  ⚠️  아래 두 줄에 본인의 Supabase 정보를 입력하세요
-  // ═══════════════════════════════════════════════
-  const SUPABASE_URL = 'https://lvctpkhurifcbkypbmdz.supabase.co';        // 예: https://abcdefgh.supabase.co
-  const SUPABASE_KEY = 'sb_publishable_hl-NSSO8S3hF_ePEvbiJHQ_vHmJpMQ9';   // anon public 키
-  // ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+//  ⚠️  아래 두 줄에 본인의 Supabase 정보를 입력하세요
+// ═══════════════════════════════════════════════
+const SUPABASE_URL = 'https://lvctpkhurifcbkypbmdz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_hl-NSSO8S3hF_ePEvbiJHQ_vHmJpMQ9';
+// ═══════════════════════════════════════════════
 
-  const API = `${SUPABASE_URL}/rest/v1/notes`;
-  const HEADERS = {
-    'apikey': SUPABASE_KEY,
-    'Authorization': `Bearer ${SUPABASE_KEY}`,
-    'Content-Type': 'application/json',
-    'Prefer': 'return=representation'
-  };
+const API = `${SUPABASE_URL}/rest/v1/notes`;
+const HDR = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': `Bearer ${SUPABASE_KEY}`,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=representation'
+};
 
-  const NOTE_COLORS = {
-    review:  [{ bg:'#dde0d4', pin:'#2d6b4a' },{ bg:'#e8ece2', pin:'#1e4a32' },{ bg:'#d4dbc8', pin:'#4e8060' }],
-    request: [{ bg:'#c8ddd0', pin:'#1e4a32' },{ bg:'#b8d4c4', pin:'#2d6b4a' },{ bg:'#d0e4d8', pin:'#1e4a32' }]
-  };
-  const ROTATIONS = [-3,-1.5,0,1.5,3,-2,2,-1,1];
+const NOTE_COLORS = {
+  review:  [{ bg:'#dde0d4', pin:'#2d6b4a' },{ bg:'#e8ece2', pin:'#1e4a32' },{ bg:'#d4dbc8', pin:'#4e8060' }],
+  request: [{ bg:'#c8ddd0', pin:'#1e4a32' },{ bg:'#b8d4c4', pin:'#2d6b4a' },{ bg:'#d0e4d8', pin:'#1e4a32' }],
+  reply:   { bg:'#eef2ea', pin:'#4e8060' }
+};
+const ROTS = [-3,-1.5,0,1.5,3,-2,2,-1,1];
 
-  let allNotes = [], filter = 'all', selectedCat = 'review', selectedStar = 0;
+let allNotes = [], filter = 'all';
+let selectedCat = 'review', selectedStar = 0, selectedNickMode = 'anon';
+let selectedReplyNickMode = 'anon';
+let replyTargetId = null, authTargetId = null, authAction = null;
 
-  /* ── Supabase fetch helpers ── */
-  async function fetchNotes() {
-    const res = await fetch(`${API}?order=created_at.desc&limit=200`, { headers: HEADERS });
-    if (!res.ok) throw new Error('fetch failed');
-    return res.json();
+/* ── API helpers ── */
+const apiFetch = (url, opt={}) => fetch(url, { headers: HDR, ...opt }).then(r => { if(!r.ok) throw r; return r.json(); });
+const fetchAll  = () => apiFetch(`${API}?order=created_at.asc&limit=500`);
+const insertRow = d  => apiFetch(API, { method:'POST', body: JSON.stringify(d) });
+const deleteRow = id => fetch(`${API}?id=eq.${id}`, { method:'DELETE', headers: HDR });
+const updateRow = (id,d) => apiFetch(`${API}?id=eq.${id}`, { method:'PATCH', body: JSON.stringify(d) });
+
+/* ── Init ── */
+async function init() {
+  try {
+    allNotes = await fetchAll();
+    renderNotes(); updateCounts();
+  } catch(e) {
+    document.getElementById('notesGrid').innerHTML =
+      '<div class="status-msg">⚠️ 데이터를 불러오지 못했어요.<br>SUPABASE_URL과 SUPABASE_KEY를 확인해주세요.</div>';
+  }
+}
+
+/* ── Render ── */
+function renderNotes() {
+  const grid = document.getElementById('notesGrid');
+  const parents = allNotes.filter(n => !n.parent_id);
+  const visible = filter === 'all' ? parents : parents.filter(n => n.category === filter);
+
+  if (!visible.length) {
+    grid.innerHTML = '<div class="empty-state">아직 메모가 없어요 ✏️<br>첫 메모를 남겨보세요!</div>';
+    return;
   }
 
-  async function insertNote(data) {
-    const res = await fetch(API, {
-      method: 'POST',
-      headers: HEADERS,
-      body: JSON.stringify(data)
-    });
-    if (!res.ok) throw new Error('insert failed');
-    return res.json();
-  }
+  grid.innerHTML = visible.map((note, i) => {
+    const col = NOTE_COLORS[note.category] ? NOTE_COLORS[note.category][i % NOTE_COLORS[note.category].length] : NOTE_COLORS.reply;
+    const rot = ROTS[i % ROTS.length];
+    const replies = allNotes.filter(n => n.parent_id === note.id);
 
-  /* ── Init ── */
-  async function init() {
-    try {
-      allNotes = await fetchNotes();
-      renderNotes();
-      updateCounts();
-    } catch(e) {
-      document.getElementById('notesGrid').innerHTML =
-        '<div class="status-msg">⚠️ 데이터를 불러오지 못했어요.<br>SUPABASE_URL과 SUPABASE_KEY를 확인해주세요.</div>';
-    }
-  }
+    const stars = note.category === 'review' && note.stars > 0
+      ? `<div class="note-stars">${[1,2,3,4,5].map(s=>`<span class="star ${s<=note.stars?'filled':'empty'}">★</span>`).join('')}</div>` : '';
+    const badge = note.category === 'review'
+      ? `<span class="note-cat-badge" style="background:#2d6b4a28;color:#1e4a32;">⭐ 리뷰</span>`
+      : `<span class="note-cat-badge" style="background:#1e4a3228;color:#1e4a32;">💬 요청사항</span>`;
+    const timeStr = fmtTime(note.created_at);
 
-  /* ── Render ── */
-  function renderNotes() {
-    const grid = document.getElementById('notesGrid');
-    const visible = filter === 'all' ? allNotes : allNotes.filter(n => n.category === filter);
-    if (!visible.length) {
-      grid.innerHTML = '<div class="empty-state">아직 메모가 없어요 ✏️<br>첫 메모를 남겨보세요!</div>';
-      return;
-    }
-    grid.innerHTML = visible.map((note, i) => {
-      const col = NOTE_COLORS[note.category][i % NOTE_COLORS[note.category].length];
-      const rot = ROTATIONS[i % ROTATIONS.length];
-      const stars = note.category === 'review' && note.stars > 0
-        ? `<div class="note-stars">${[1,2,3,4,5].map(s=>`<span class="star ${s<=note.stars?'filled':'empty'}">★</span>`).join('')}</div>` : '';
-      const badge = note.category === 'review'
-        ? `<span class="note-cat-badge" style="background:#2d6b4a28;color:#1e4a32;">⭐ 리뷰</span>`
-        : `<span class="note-cat-badge" style="background:#1e4a3228;color:#1e4a32;">💬 요청사항</span>`;
-      const time = new Date(note.created_at);
-      const timeStr = `${time.getMonth()+1}/${time.getDate()} ${String(time.getHours()).padStart(2,'0')}:${String(time.getMinutes()).padStart(2,'0')}`;
-      return `<div class="note" style="background:${col.bg};transform:rotate(${rot}deg)">
+    const repliesHTML = replies.map(r => `
+      <div class="reply-card" style="background:${NOTE_COLORS.reply.bg}">
+        <span class="reply-badge">↩ 답글</span>
+        <div class="reply-text">${escHtml(r.content)}</div>
+        <div class="note-footer">
+          <span>${escHtml(r.nickname)} · ${fmtTime(r.created_at)}</span>
+          <div class="note-actions">
+            <button class="edit-btn" onclick="openAuth(${r.id},'edit')">수정</button>
+            <button class="del-btn"  onclick="openAuth(${r.id},'delete')">삭제</button>
+          </div>
+        </div>
+      </div>`).join('');
+
+    const replyBtn = replies.length === 0
+      ? `<button class="reply-btn" onclick="openReplyModal(${note.id})">↩ 답글</button>` : '';
+
+    return `<div class="note-group">
+      <div class="note" style="background:${col.bg};transform:rotate(${rot}deg)">
         <div class="note-pin" style="background:${col.pin}"></div>
         ${badge}${stars}
         <div class="note-text">${escHtml(note.content)}</div>
-        <div class="note-footer">익명 · ${timeStr}</div>
+        <div class="note-footer">
+          <span>${escHtml(note.nickname)} · ${timeStr}</span>
+          <div class="note-actions">
+            ${replyBtn}
+            <button class="edit-btn" onclick="openAuth(${note.id},'edit')">수정</button>
+            <button class="del-btn"  onclick="openAuth(${note.id},'delete')">삭제</button>
+          </div>
+        </div>
         <div class="note-fold"></div>
-      </div>`;
-    }).join('');
-  }
+      </div>
+      ${repliesHTML}
+    </div>`;
+  }).join('');
+}
 
-  function updateCounts() {
-    document.getElementById('cnt-all').textContent     = allNotes.length;
-    document.getElementById('cnt-review').textContent  = allNotes.filter(n=>n.category==='review').length;
-    document.getElementById('cnt-request').textContent = allNotes.filter(n=>n.category==='request').length;
-  }
+function updateCounts() {
+  const parents = allNotes.filter(n => !n.parent_id);
+  document.getElementById('cnt-all').textContent     = parents.length;
+  document.getElementById('cnt-review').textContent  = parents.filter(n=>n.category==='review').length;
+  document.getElementById('cnt-request').textContent = parents.filter(n=>n.category==='request').length;
+}
 
-  function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-  }
+function fmtTime(ts) {
+  const d = new Date(ts);
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
 
-  /* ── Filter ── */
-  function setFilter(f) {
-    filter = f;
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+/* ── Filter ── */
+function setFilter(f) {
+  filter = f;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  renderNotes();
+}
+
+/* ── Modal helpers ── */
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeIfOutside(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+function showErr(el, msg) { el.textContent = msg; el.classList.add('show'); }
+
+/* ── Write modal ── */
+function selectCat(cat) {
+  selectedCat = cat;
+  document.getElementById('btn-review').classList.toggle('selected',  cat==='review');
+  document.getElementById('btn-request').classList.toggle('selected', cat==='request');
+  document.getElementById('starsField').style.display = cat==='review' ? 'block' : 'none';
+  if (cat!=='review') setStar(0);
+}
+function setStar(n) {
+  selectedStar = n;
+  document.querySelectorAll('#starPicker span').forEach((s,i) => s.classList.toggle('selected', i<n));
+  document.getElementById('starLabel').textContent = n===0 ? '(선택 안 함)' : `(${n}점)`;
+}
+function selectNick(mode) {
+  selectedNickMode = mode;
+  document.getElementById('btn-anon').classList.toggle('selected', mode==='anon');
+  document.getElementById('btn-nick').classList.toggle('selected',  mode==='nick');
+  document.getElementById('nickInput').style.display = mode==='nick' ? 'block' : 'none';
+}
+function updateChar() { document.getElementById('charCount').textContent = document.getElementById('noteText').value.length; }
+
+async function submitNote() {
+  const text = document.getElementById('noteText').value.trim();
+  const pw   = document.getElementById('pwInput').value.trim();
+  const nick = selectedNickMode==='nick' ? (document.getElementById('nickInput').value.trim()||'익명') : '익명';
+  const err  = document.getElementById('writeError');
+
+  if (!text) { showErr(err,'내용을 입력해주세요.'); return; }
+  if (!/^\d{4}$/.test(pw)) { showErr(err,'비밀번호는 숫자 4자리로 입력해주세요.'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled=true; btn.textContent='저장 중...'; err.classList.remove('show');
+
+  try {
+    const [n] = await insertRow({ category:selectedCat, content:text, stars:selectedCat==='review'?selectedStar:0, nickname:nick, password:pw, parent_id:null });
+    allNotes.push(n);
+    renderNotes(); updateCounts();
+    closeModal('writeModal');
+    resetWriteModal();
+    showToast('📌 메모가 붙었어요!');
+  } catch(e) { showErr(err,'저장에 실패했어요. 다시 시도해주세요.'); }
+  finally { btn.disabled=false; btn.textContent='📌 붙이기'; }
+}
+
+function resetWriteModal() {
+  document.getElementById('noteText').value = '';
+  document.getElementById('pwInput').value  = '';
+  document.getElementById('nickInput').value = '';
+  document.getElementById('nickInput').style.display = 'none';
+  document.getElementById('writeError').classList.remove('show');
+  updateChar(); setStar(0); selectCat('review'); selectNick('anon');
+}
+
+/* ── Reply modal ── */
+function openReplyModal(parentId) {
+  replyTargetId = parentId;
+  document.getElementById('replyText').value = '';
+  document.getElementById('replyPwInput').value = '';
+  document.getElementById('replyNickInput').value = '';
+  document.getElementById('replyNickInput').style.display = 'none';
+  document.getElementById('replyError').classList.remove('show');
+  selectReplyNick('anon'); updateReplyChar();
+  openModal('replyModal');
+  setTimeout(()=>document.getElementById('replyText').focus(), 50);
+}
+function selectReplyNick(mode) {
+  selectedReplyNickMode = mode;
+  document.getElementById('rbtn-anon').classList.toggle('selected', mode==='anon');
+  document.getElementById('rbtn-nick').classList.toggle('selected',  mode==='nick');
+  document.getElementById('replyNickInput').style.display = mode==='nick' ? 'block' : 'none';
+}
+function updateReplyChar() { document.getElementById('replyCharCount').textContent = document.getElementById('replyText').value.length; }
+
+async function submitReply() {
+  const text = document.getElementById('replyText').value.trim();
+  const pw   = document.getElementById('replyPwInput').value.trim();
+  const nick = selectedReplyNickMode==='nick' ? (document.getElementById('replyNickInput').value.trim()||'익명') : '익명';
+  const err  = document.getElementById('replyError');
+
+  if (!text) { showErr(err,'내용을 입력해주세요.'); return; }
+  if (!/^\d{4}$/.test(pw)) { showErr(err,'비밀번호는 숫자 4자리로 입력해주세요.'); return; }
+
+  const btn = document.getElementById('replySubmitBtn');
+  btn.disabled=true; btn.textContent='저장 중...'; err.classList.remove('show');
+
+  try {
+    const [r] = await insertRow({ category:null, content:text, stars:0, nickname:nick, password:pw, parent_id:replyTargetId });
+    allNotes.push(r);
     renderNotes();
-  }
+    closeModal('replyModal');
+    showToast('💬 답글이 달렸어요!');
+  } catch(e) { showErr(err,'저장에 실패했어요.'); }
+  finally { btn.disabled=false; btn.textContent='💬 답글 달기'; }
+}
 
-  /* ── Modal ── */
-  function openModal()  { document.getElementById('modalOverlay').classList.add('open'); document.getElementById('noteText').focus(); }
-  function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
-    document.getElementById('noteText').value = '';
-    updateChar(); setStar(0); selectCat('review');
-  }
-  function closeIfOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+/* ── Auth modal ── */
+function openAuth(id, action) {
+  authTargetId = id; authAction = action;
+  document.getElementById('authTitle').textContent = action==='delete' ? '🗑 삭제 확인' : '✏️ 수정 확인';
+  document.getElementById('authPwInput').value = '';
+  document.getElementById('authError').classList.remove('show');
+  openModal('authModal');
+  setTimeout(()=>document.getElementById('authPwInput').focus(), 50);
+}
 
-  function selectCat(cat) {
-    selectedCat = cat;
-    document.getElementById('btn-review').classList.toggle('selected',  cat === 'review');
-    document.getElementById('btn-request').classList.toggle('selected', cat === 'request');
-    document.getElementById('starsField').style.display = cat === 'review' ? 'block' : 'none';
-    if (cat !== 'review') setStar(0);
-  }
+async function confirmAuth() {
+  const pw  = document.getElementById('authPwInput').value.trim();
+  const err = document.getElementById('authError');
+  if (!pw) { showErr(err,'비밀번호를 입력해주세요.'); return; }
 
-  function setStar(n) {
-    selectedStar = n;
-    document.querySelectorAll('#starPicker span').forEach((s,i) => s.classList.toggle('selected', i < n));
-    document.getElementById('starLabel').textContent = n === 0 ? '(선택 안 함)' : `(${n}점)`;
-  }
+  const note = allNotes.find(n => n.id === authTargetId);
+  if (!note || note.password !== pw) { showErr(err,'비밀번호가 맞지 않습니다.'); return; }
 
-  function updateChar() {
-    document.getElementById('charCount').textContent = document.getElementById('noteText').value.length;
-  }
+  closeModal('authModal');
 
-  /* ── Submit ── */
-  async function submitNote() {
-    const text = document.getElementById('noteText').value.trim();
-    if (!text) { showToast('내용을 입력해주세요!'); return; }
-
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true; btn.textContent = '저장 중...';
-
+  if (authAction === 'delete') {
     try {
-      const [newNote] = await insertNote({
-        category: selectedCat,
-        content:  text,
-        stars:    selectedCat === 'review' ? selectedStar : 0
-      });
-      allNotes.unshift(newNote);
+      await deleteRow(authTargetId);
+      allNotes = allNotes.filter(n => n.id !== authTargetId && n.parent_id !== authTargetId);
       renderNotes(); updateCounts();
-      closeModal(); showToast('📌 메모가 붙었어요!');
-    } catch(e) {
-      showToast('저장에 실패했어요. 다시 시도해주세요.');
-    } finally {
-      btn.disabled = false; btn.textContent = '📌 붙이기';
-    }
-  }
+      showToast('🗑 삭제됐어요.');
+    } catch(e) { showToast('삭제에 실패했어요.'); }
 
-  /* ── Toast ── */
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2200);
+  } else {
+    document.getElementById('editText').value = note.content;
+    updateEditChar();
+    document.getElementById('editError').classList.remove('show');
+    openModal('editModal');
+    setTimeout(()=>document.getElementById('editText').focus(), 50);
   }
+}
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-  selectCat('review');
-  init();
+/* ── Edit modal ── */
+function updateEditChar() { document.getElementById('editCharCount').textContent = document.getElementById('editText').value.length; }
+
+async function submitEdit() {
+  const text = document.getElementById('editText').value.trim();
+  const err  = document.getElementById('editError');
+  if (!text) { showErr(err,'내용을 입력해주세요.'); return; }
+
+  const btn = document.getElementById('editSubmitBtn');
+  btn.disabled=true; btn.textContent='저장 중...'; err.classList.remove('show');
+
+  try {
+    await updateRow(authTargetId, { content: text });
+    const idx = allNotes.findIndex(n => n.id === authTargetId);
+    if (idx !== -1) allNotes[idx].content = text;
+    renderNotes();
+    closeModal('editModal');
+    showToast('✏️ 수정됐어요!');
+  } catch(e) { showErr(err,'수정에 실패했어요.'); }
+  finally { btn.disabled=false; btn.textContent='✏️ 수정 완료'; }
+}
+
+/* ── Toast ── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') ['writeModal','replyModal','authModal','editModal'].forEach(closeModal);
+});
+
+selectCat('review');
+init();
 </script>
 </body>
 </html>
