@@ -17,209 +17,309 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --g1: #dde0d4; --g2: #f0eef8; --g3: #b8a0d8; --g4: #c9a0c0; --g5: #a07898;
-  --cream: #f4f6f0; --text: #1e4a32; --header: rgba(255,255,255,0.85);
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --border: #e8e6e0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #888;
+  --accent: #1a1a1a;
+  --accent-light: #f0eeea;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-hover: 0 4px 8px rgba(0,0,0,0.1), 0 12px 32px rgba(0,0,0,0.1);
+  --radius: 4px;
 }
 
 body {
   height: 100vh; overflow: hidden;
-  background-color: #f5f0fb;
-  background-image: linear-gradient(135deg, #fde8f0 0%, #e8f0fd 40%, #fdf5e0 70%, #e8fdf0 100%);
+  background: var(--bg);
   font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text-primary);
   display: flex; flex-direction: column;
 }
 
 /* ── Header ── */
 .board-header {
-  background: var(--header); color: #f0f4ee;
-  padding: 11px 22px; display: flex; align-items: center;
-  justify-content: space-between; border-bottom: 3px solid var(--g4);
-  gap: 12px; flex-shrink: 0; flex-wrap: wrap;
-  color: #444;
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 56px;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0; gap: 16px; flex-wrap: wrap;
 }
-.board-title { font-size: 20px; font-weight: normal; font-family: 'DoolgiMayoGothic', sans-serif; letter-spacing: 2px; display: flex; align-items: center; gap: 7px; }
-.header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.board-title {
+  font-family: 'DoolgiMayoGothic', sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  display: flex; align-items: center; gap: 8px;
+}
+
+.header-actions { display: flex; gap: 8px; align-items: center; }
 
 .btn-write {
-  background: var(--g1); color: var(--text); border: none;
-  padding: 7px 16px; border-radius: 3px; font-family: inherit;
-  font-size: 13px; font-weight: 700; cursor: pointer;
-  box-shadow: 2px 3px 0 var(--g3); transition: all 0.15s;
+  background: var(--accent); color: #fff;
+  border: none; padding: 7px 18px;
+  border-radius: var(--radius);
+  font-family: inherit; font-size: 12px;
+  font-weight: 600; letter-spacing: 0.5px;
+  cursor: pointer; transition: all 0.15s;
 }
-.btn-write:hover { transform: translateY(-1px); box-shadow: 3px 4px 0 var(--g3); }
-.btn-write:active { transform: translateY(1px); box-shadow: 1px 1px 0 var(--g3); }
+.btn-write:hover { background: #333; }
+.btn-write:active { background: #000; }
 
-.cat-filter { display: flex; gap: 5px; }
+.cat-filter { display: flex; gap: 2px; }
 .cat-btn {
-  background: rgba(255,255,255,0.14); color: #f0f4ee;
-  border: 1.5px solid rgba(255,255,255,0.28);
-  padding: 4px 12px; border-radius: 20px;
-  font-family: inherit; font-size: 12px; cursor: pointer; transition: all 0.15s;
+  background: transparent; color: var(--text-secondary);
+  border: none; padding: 6px 14px; border-radius: var(--radius);
+  font-family: inherit; font-size: 12px;
+  font-weight: 500; cursor: pointer; transition: all 0.15s;
+  letter-spacing: 0.3px;
 }
-.cat-btn:hover, .cat-btn.active { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.6); color: #fff; }
-.count-badge { background: rgba(255,255,255,0.2); border-radius: 10px; padding: 1px 6px; font-size: 11px; margin-left: 3px; }
+.cat-btn:hover { background: var(--accent-light); color: var(--text-primary); }
+.cat-btn.active { background: var(--accent-light); color: var(--text-primary); font-weight: 700; }
+.count-badge {
+  display: inline-block;
+  background: var(--border); color: var(--text-secondary);
+  border-radius: 10px; padding: 0 6px;
+  font-size: 10px; margin-left: 3px; font-weight: 600;
+}
+.cat-btn.active .count-badge { background: #ddd; color: var(--text-primary); }
 
 /* ── Board ── */
-.board-area { flex: 1; overflow-y: auto; padding: 24px 22px; scrollbar-width: thin; scrollbar-color: rgba(30,74,50,0.3) transparent; }
-.notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 32px 20px; align-items: start; }
+.board-area {
+  flex: 1; overflow-y: auto; padding: 32px;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
 
 /* ── Note group ── */
 .note-group { display: flex; flex-direction: column; gap: 0; }
 
 /* ── Note card ── */
 .note {
-  position: relative; padding: 18px 15px 12px;
-  border-radius: 2px; min-height: 148px;
-  box-shadow: 3px 5px 14px rgba(0,0,0,0.22);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px 14px;
+  min-height: 140px;
+  box-shadow: var(--shadow);
   word-break: break-word;
-  transition: transform 0.2s, box-shadow 0.2s;
-  animation: noteIn 0.3s cubic-bezier(.22,.68,0,1.2) both;
+  transition: box-shadow 0.2s, transform 0.2s;
+  animation: noteIn 0.25s ease both;
+  position: relative;
 }
-.note:hover { box-shadow: 5px 9px 22px rgba(0,0,0,0.28); z-index: 10; }
-@keyframes noteIn { from { opacity:0; transform:scale(0.88) translateY(10px); } to { opacity:1; } }
+.note:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+@keyframes noteIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
 
 /* ── Reply card ── */
 .reply-card {
-  position: relative; margin-top: 6px; margin-left: 18px;
-  padding: 12px 14px 10px; border-radius: 2px; min-height: 80px;
-  box-shadow: 2px 4px 10px rgba(0,0,0,0.18); word-break: break-word;
-  animation: noteIn 0.3s cubic-bezier(.22,.68,0,1.2) both;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  margin-left: 16px;
+  padding: 12px 16px 10px;
+  word-break: break-word;
+  animation: noteIn 0.25s ease both;
+  position: relative;
 }
 .reply-card::before {
-  content: ''; position: absolute; left: -14px; top: 18px;
-  width: 10px; height: 2px; background: rgba(30,74,50,0.3);
+  content: '';
+  position: absolute; left: -1px; top: 0;
+  width: 3px; height: 100%;
+  background: var(--border);
+  border-radius: 0 0 0 var(--radius);
 }
 
-.note-pin {
-  position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
-  width: 16px; height: 16px; border-radius: 50%;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.38), inset 0 1px 2px rgba(255,255,255,0.4); z-index: 2;
+.note-cat-badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 2px; margin-bottom: 8px;
+  letter-spacing: 0.5px; text-transform: uppercase;
 }
-.note-pin::after {
-  content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
-  width: 3px; height: 6px; background: rgba(0,0,0,0.2); border-radius: 0 0 2px 2px;
+.reply-badge {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 1px 7px; border-radius: 2px; margin-bottom: 6px;
+  background: var(--border); color: var(--text-secondary);
+  letter-spacing: 0.3px;
 }
 
-.note-cat-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-bottom: 6px; }
-.reply-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 10px; margin-bottom: 5px; background: rgba(30,74,50,0.12); color: var(--g5); }
+.note-text {
+  font-size: 14px; font-weight: 500; line-height: 1.7;
+  color: var(--text-primary); margin-bottom: 12px; min-height: 44px;
+}
+.reply-text {
+  font-size: 13px; font-weight: 400; line-height: 1.65;
+  color: #444; margin-bottom: 8px;
+}
 
-.note-text { font-size: 14px; font-weight: 600; line-height: 1.65; color: rgba(0,0,0,0.75); margin-bottom: 8px; min-height: 44px; }
-.reply-text { font-size: 13px; font-weight: 500; line-height: 1.6; color: rgba(0,0,0,0.7); margin-bottom: 6px; }
-
-.note-stars { display: flex; gap: 2px; margin-bottom: 6px; }
-.star { font-size: 13px; }
-.star.filled { color: var(--g4); }
-.star.empty  { color: rgba(0,0,0,0.16); }
+.note-stars { display: flex; gap: 2px; margin-bottom: 8px; }
+.star { font-size: 12px; }
+.star.filled { color: #c9a96e; }
+.star.empty  { color: var(--border); }
 
 .note-footer {
-  font-size: 10px; color: rgba(0,0,0,0.34);
-  border-top: 1px dashed rgba(0,0,0,0.12); padding-top: 5px;
+  font-size: 10px; color: var(--text-secondary);
+  border-top: 1px solid var(--border); padding-top: 8px;
   display: flex; justify-content: space-between; align-items: center; gap: 4px;
 }
 .note-actions { display: flex; gap: 4px; }
 .note-actions button {
-  background: rgba(0,0,0,0.07); border: none; border-radius: 3px;
-  font-size: 10px; padding: 2px 6px; cursor: pointer;
-  color: rgba(0,0,0,0.5); font-family: inherit; transition: background 0.15s;
+  background: transparent; border: 1px solid var(--border);
+  border-radius: 2px; font-size: 10px; padding: 2px 7px;
+  cursor: pointer; color: var(--text-secondary);
+  font-family: inherit; transition: all 0.15s; letter-spacing: 0.3px;
 }
-.note-actions button:hover { background: rgba(0,0,0,0.14); }
-.note-actions button.reply-btn { background: rgba(45,107,74,0.12); color: var(--g4); }
-.note-actions button.reply-btn:hover { background: rgba(45,107,74,0.22); }
-.note-actions button.del-btn { background: rgba(180,50,50,0.08); color: rgba(160,40,40,0.7); }
-.note-actions button.del-btn:hover { background: rgba(180,50,50,0.18); }
+.note-actions button:hover { background: var(--accent-light); color: var(--text-primary); border-color: #ccc; }
+.note-actions button.reply-btn { color: #888; }
+.note-actions button.reply-btn:hover { color: var(--text-primary); }
+.note-actions button.del-btn:hover { background: #fff0f0; color: #c00; border-color: #ffcccc; }
 
-.note-fold { position: absolute; bottom: 0; right: 0; width: 18px; height: 18px; overflow: hidden; pointer-events: none; }
-.note-fold::before { content: ''; position: absolute; bottom: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 0 18px 18px; border-color: transparent transparent rgba(0,0,0,0.09) transparent; }
+.empty-state {
+  text-align: center; padding: 80px 20px;
+  color: var(--text-secondary); font-size: 15px;
+  grid-column: 1/-1; line-height: 2;
+}
+.status-msg {
+  text-align: center; padding: 80px 20px;
+  color: var(--text-secondary); font-size: 14px;
+  grid-column: 1/-1;
+}
 
-.empty-state { text-align: center; padding: 60px 20px; color: rgba(30,74,50,0.45); font-size: 17px; grid-column: 1/-1; line-height: 1.9; }
-.status-msg { text-align: center; padding: 60px 20px; color: rgba(30,74,50,0.45); font-size: 15px; grid-column: 1/-1; }
+/* ── Divider ── */
+.section-divider {
+  display: flex; align-items: center; gap: 12px;
+  grid-column: 1/-1; margin: 8px 0 4px;
+  color: var(--text-secondary); font-size: 11px;
+  font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+}
+.section-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
 
-/* ── Modal base ── */
+/* ── Modal ── */
 .modal-overlay {
   display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.5); z-index: 200;
+  background: rgba(0,0,0,0.3); z-index: 200;
   align-items: center; justify-content: center; padding: 16px;
+  backdrop-filter: blur(2px);
 }
 .modal-overlay.open { display: flex; }
 .modal {
-  background: var(--cream); border-radius: 3px; padding: 26px 22px 20px;
-  width: 100%; max-width: 400px;
-  box-shadow: 0 14px 44px rgba(0,0,0,0.35), 3px 4px 0 var(--g3);
-  position: relative; animation: modalIn 0.2s cubic-bezier(.22,.68,0,1.15) both;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px 22px;
+  width: 100%; max-width: 420px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+  position: relative;
+  animation: modalIn 0.2s cubic-bezier(.22,.68,0,1.15) both;
 }
-@keyframes modalIn { from { opacity:0; transform:scale(0.92) translateY(14px); } to { opacity:1; transform:none; } }
+@keyframes modalIn { from { opacity:0; transform:scale(0.96) translateY(10px); } to { opacity:1; transform:none; } }
 
-.modal h2 { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
-.modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; font-size: 19px; cursor: pointer; color: var(--g3); }
+.modal h2 {
+  font-size: 16px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 20px;
+  letter-spacing: 0.3px;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 18px;
+  background: none; border: none; font-size: 18px;
+  cursor: pointer; color: var(--text-secondary);
+  line-height: 1; transition: color 0.15s;
+}
+.modal-close:hover { color: var(--text-primary); }
 
-.field { margin-bottom: 12px; }
-.field label { display: block; font-size: 12px; font-weight: 700; color: var(--g4); margin-bottom: 4px; }
+.field { margin-bottom: 14px; }
+.field label {
+  display: block; font-size: 11px; font-weight: 700;
+  color: var(--text-secondary); margin-bottom: 5px;
+  letter-spacing: 0.8px; text-transform: uppercase;
+}
 
-.cat-select { display: flex; gap: 7px; }
+.cat-select { display: flex; gap: 6px; }
 .cat-select button {
-  flex: 1; padding: 7px; border: 2px solid var(--g2);
-  background: transparent; border-radius: 3px; font-family: inherit;
-  font-size: 13px; cursor: pointer; color: var(--g4); transition: all 0.15s;
+  flex: 1; padding: 8px; border: 1px solid var(--border);
+  background: transparent; border-radius: var(--radius);
+  font-family: inherit; font-size: 13px;
+  cursor: pointer; color: var(--text-secondary); transition: all 0.15s;
 }
-.cat-select button.selected { background: var(--g1); border-color: var(--g3); color: var(--text); font-weight: 700; }
+.cat-select button.selected {
+  background: var(--accent); border-color: var(--accent);
+  color: #fff; font-weight: 700;
+}
 
-.nick-row { display: flex; gap: 7px; }
-.nick-toggle { display: flex; gap: 5px; flex-shrink: 0; }
+.nick-row { display: flex; gap: 6px; }
+.nick-toggle { display: flex; gap: 4px; flex-shrink: 0; }
 .nick-toggle button {
-  padding: 5px 10px; border: 1.5px solid var(--g2); background: transparent;
-  border-radius: 3px; font-family: inherit; font-size: 12px; cursor: pointer;
-  color: var(--g4); transition: all 0.15s; white-space: nowrap;
+  padding: 6px 12px; border: 1px solid var(--border);
+  background: transparent; border-radius: var(--radius);
+  font-family: inherit; font-size: 12px;
+  cursor: pointer; color: var(--text-secondary); transition: all 0.15s;
+  white-space: nowrap;
 }
-.nick-toggle button.selected { background: var(--g1); border-color: var(--g3); font-weight: 700; }
-
-.input-row { display: flex; gap: 7px; }
+.nick-toggle button.selected {
+  background: var(--accent-light); border-color: #ccc;
+  color: var(--text-primary); font-weight: 700;
+}
 
 input[type=text], input[type=password] {
-  width: 100%; padding: 7px 10px; border: 1.5px solid var(--g2); border-radius: 3px;
-  font-family: inherit; font-size: 13px; color: var(--text);
-  background: rgba(255,255,255,0.65); outline: none; transition: border-color 0.15s;
+  width: 100%; padding: 8px 10px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-family: inherit; font-size: 13px; color: var(--text-primary);
+  background: var(--surface); outline: none; transition: border-color 0.15s;
 }
-input[type=text]:focus, input[type=password]:focus { border-color: var(--g3); }
+input[type=text]:focus, input[type=password]:focus { border-color: #999; }
 input[type=password] { letter-spacing: 3px; }
 
-.star-picker { display: flex; gap: 4px; font-size: 24px; cursor: pointer; margin-top: 2px; }
-.star-picker span { transition: transform 0.1s; color: var(--g2); user-select: none; }
-.star-picker span:hover { transform: scale(1.2); }
-.star-picker span.selected { color: var(--g4); }
+.star-picker { display: flex; gap: 4px; font-size: 22px; cursor: pointer; margin-top: 2px; }
+.star-picker span { transition: transform 0.1s; color: var(--border); user-select: none; }
+.star-picker span:hover { transform: scale(1.15); }
+.star-picker span.selected { color: #c9a96e; }
 
 textarea {
-  width: 100%; height: 95px; border: 1.5px solid var(--g2); border-radius: 3px;
-  padding: 8px 10px; font-family: inherit; font-size: 14px; font-weight: 600;
-  color: var(--text); background: rgba(255,255,255,0.65);
-  resize: none; outline: none; transition: border-color 0.15s;
+  width: 100%; height: 90px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 8px 10px; font-family: inherit; font-size: 14px;
+  color: var(--text-primary); background: var(--surface);
+  resize: none; outline: none; transition: border-color 0.15s; line-height: 1.6;
 }
-textarea:focus { border-color: var(--g3); }
-textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
-.char-count { text-align: right; font-size: 11px; color: rgba(30,74,50,0.4); margin-top: 3px; }
+textarea:focus { border-color: #999; }
+textarea::placeholder { color: #bbb; font-weight: 400; }
+.char-count { text-align: right; font-size: 10px; color: var(--text-secondary); margin-top: 3px; }
 
 .btn-submit {
-  width: 100%; padding: 10px; background: var(--g4); color: #f0f4ee;
-  border: none; border-radius: 3px; font-family: inherit; font-size: 14px;
-  font-weight: 700; cursor: pointer; box-shadow: 2px 3px 0 var(--g5);
+  width: 100%; padding: 10px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.5px; cursor: pointer;
   transition: all 0.15s; margin-top: 4px;
 }
-.btn-submit:hover { transform: translateY(-1px); box-shadow: 3px 4px 0 var(--g5); }
-.btn-submit:active { transform: translateY(1px); box-shadow: 1px 1px 0 var(--g5); }
-.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-submit:hover { background: #333; }
+.btn-submit:active { background: #000; }
+.btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
 
-.error-msg { font-size: 12px; color: #b83232; margin-top: 6px; display: none; }
+.error-msg { font-size: 11px; color: #c00; margin-top: 6px; display: none; }
 .error-msg.show { display: block; }
 
 /* ── Toast ── */
 .toast {
-  position: fixed; bottom: 22px; left: 50%;
-  transform: translateX(-50%) translateY(14px);
-  background: rgba(30,74,50,0.92); color: #f0f4ee;
-  padding: 9px 22px; border-radius: 30px;
-  font-size: 13px; opacity: 0; transition: all 0.3s;
-  z-index: 300; white-space: nowrap; pointer-events: none;
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--text-primary); color: #fff;
+  padding: 10px 22px; border-radius: 100px;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.3px;
+  opacity: 0; transition: all 0.25s; z-index: 300;
+  white-space: nowrap; pointer-events: none;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
@@ -231,10 +331,10 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
   <div class="header-actions">
     <div class="cat-filter">
       <button class="cat-btn active" data-filter="all"     onclick="setFilter('all')">전체 <span class="count-badge" id="cnt-all">0</span></button>
-      <button class="cat-btn"        data-filter="review"  onclick="setFilter('review')">⭐ 리뷰 <span class="count-badge" id="cnt-review">0</span></button>
-      <button class="cat-btn"        data-filter="request" onclick="setFilter('request')">💬 요청사항 <span class="count-badge" id="cnt-request">0</span></button>
+      <button class="cat-btn"        data-filter="review"  onclick="setFilter('review')">리뷰 <span class="count-badge" id="cnt-review">0</span></button>
+      <button class="cat-btn"        data-filter="request" onclick="setFilter('request')">요청사항 <span class="count-badge" id="cnt-request">0</span></button>
     </div>
-    <button class="btn-write" onclick="openModal('writeModal')">✏️ 메모 쓰기</button>
+    <button class="btn-write" onclick="openModal('writeModal')">+ 메모 쓰기</button>
   </div>
 </header>
 
@@ -248,7 +348,7 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
 <div class="modal-overlay" id="writeModal" onclick="closeIfOutside(event,'writeModal')">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('writeModal')">✕</button>
-    <h2>📝 메모 남기기</h2>
+    <h2>메모 남기기</h2>
     <div class="field">
       <label>카테고리</label>
       <div class="cat-select">
@@ -257,7 +357,7 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
       </div>
     </div>
     <div class="field" id="starsField">
-      <label>별점 <span id="starLabel" style="color:var(--g3);font-size:11px;">(선택 안 함)</span></label>
+      <label>별점 <span id="starLabel" style="color:#999;font-size:10px;text-transform:none;letter-spacing:0;">(선택 안 함)</span></label>
       <div class="star-picker" id="starPicker">
         <span onclick="setStar(1)">★</span><span onclick="setStar(2)">★</span>
         <span onclick="setStar(3)">★</span><span onclick="setStar(4)">★</span>
@@ -281,10 +381,10 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
     <div class="field">
       <label>내용</label>
       <textarea id="noteText" placeholder="익명으로 남기는 메모예요 :)" maxlength="200" oninput="updateChar()"></textarea>
-      <div class="char-count"><span id="charCount">0</span>/200</div>
+      <div class="char-count"><span id="charCount">0</span> / 200</div>
     </div>
     <div class="error-msg" id="writeError"></div>
-    <button class="btn-submit" id="submitBtn" onclick="submitNote()">📌 붙이기</button>
+    <button class="btn-submit" id="submitBtn" onclick="submitNote()">붙이기</button>
   </div>
 </div>
 
@@ -292,7 +392,7 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
 <div class="modal-overlay" id="replyModal" onclick="closeIfOutside(event,'replyModal')">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('replyModal')">✕</button>
-    <h2>💬 답글 달기</h2>
+    <h2>답글 달기</h2>
     <div class="field">
       <label>작성자</label>
       <div class="nick-row">
@@ -310,10 +410,10 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
     <div class="field">
       <label>내용</label>
       <textarea id="replyText" placeholder="답글을 입력하세요" maxlength="200" oninput="updateReplyChar()"></textarea>
-      <div class="char-count"><span id="replyCharCount">0</span>/200</div>
+      <div class="char-count"><span id="replyCharCount">0</span> / 200</div>
     </div>
     <div class="error-msg" id="replyError"></div>
-    <button class="btn-submit" id="replySubmitBtn" onclick="submitReply()">💬 답글 달기</button>
+    <button class="btn-submit" id="replySubmitBtn" onclick="submitReply()">답글 달기</button>
   </div>
 </div>
 
@@ -321,9 +421,9 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
 <div class="modal-overlay" id="authModal" onclick="closeIfOutside(event,'authModal')">
   <div class="modal" style="max-width:320px">
     <button class="modal-close" onclick="closeModal('authModal')">✕</button>
-    <h2 id="authTitle">🔑 확인</h2>
+    <h2 id="authTitle">확인</h2>
     <div class="field">
-      <label>비밀번호 입력</label>
+      <label>비밀번호</label>
       <input type="password" id="authPwInput" placeholder="0000" maxlength="4" inputmode="numeric"
         onkeydown="if(event.key==='Enter') confirmAuth()">
     </div>
@@ -336,14 +436,14 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
 <div class="modal-overlay" id="editModal" onclick="closeIfOutside(event,'editModal')">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('editModal')">✕</button>
-    <h2>✏️ 메모 수정</h2>
+    <h2>메모 수정</h2>
     <div class="field">
       <label>내용</label>
       <textarea id="editText" maxlength="200" oninput="updateEditChar()"></textarea>
-      <div class="char-count"><span id="editCharCount">0</span>/200</div>
+      <div class="char-count"><span id="editCharCount">0</span> / 200</div>
     </div>
     <div class="error-msg" id="editError"></div>
-    <button class="btn-submit" id="editSubmitBtn" onclick="submitEdit()">✏️ 수정 완료</button>
+    <button class="btn-submit" id="editSubmitBtn" onclick="submitEdit()">수정 완료</button>
   </div>
 </div>
 
@@ -366,11 +466,19 @@ const HDR = {
 };
 
 const NOTE_COLORS = {
-  review:  [{ bg:'#fde8f0', pin:'#e8a0b8' },{ bg:'#fdf0e8', pin:'#e8b89a' },{ bg:'#fdf8e8', pin:'#d4c090' }],
-  request: [{ bg:'#e8f0fd', pin:'#9ab0e8' },{ bg:'#ede8fd', pin:'#b09ae8' },{ bg:'#e8fdf5', pin:'#8ad4b8' }],
-  reply:   { bg:'#f8f8f8', pin:'#bbb' }
+  review:  [
+    { bg:'#fff9f0', pin:'#c9a96e' },
+    { bg:'#fff5f8', pin:'#d4a0b0' },
+    { bg:'#f8f8ff', pin:'#a0a8d4' }
+  ],
+  request: [
+    { bg:'#f0f8ff', pin:'#7ab0d4' },
+    { bg:'#f0fff8', pin:'#7ad4a8' },
+    { bg:'#fdf0ff', pin:'#b87ad4' }
+  ],
+  reply: { bg:'#fafafa', pin:'#ccc' }
 };
-const ROTS = [-3,-1.5,0,1.5,3,-2,2,-1,1];
+const ROTS = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 let allNotes = [], filter = 'all';
 let selectedCat = 'review', selectedStar = 0, selectedNickMode = 'anon';
@@ -402,31 +510,33 @@ function renderNotes() {
   const visible = filter === 'all' ? parents : parents.filter(n => n.category === filter);
 
   if (!visible.length) {
-    grid.innerHTML = '<div class="empty-state">아직 메모가 없어요 ✏️<br>첫 메모를 남겨보세요!</div>';
+    grid.innerHTML = '<div class="empty-state">아직 메모가 없어요<br><span style="font-size:13px;color:#bbb">첫 메모를 남겨보세요</span></div>';
     return;
   }
 
   grid.innerHTML = visible.map((note, i) => {
-    const col = NOTE_COLORS[note.category] ? NOTE_COLORS[note.category][i % NOTE_COLORS[note.category].length] : NOTE_COLORS.reply;
-    const rot = ROTS[i % ROTS.length];
+    const colors = NOTE_COLORS[note.category] || NOTE_COLORS.reply;
+    const col = Array.isArray(colors) ? colors[i % colors.length] : colors;
     const replies = allNotes.filter(n => n.parent_id === note.id);
 
     const stars = note.category === 'review' && note.stars > 0
       ? `<div class="note-stars">${[1,2,3,4,5].map(s=>`<span class="star ${s<=note.stars?'filled':'empty'}">★</span>`).join('')}</div>` : '';
+
     const badge = note.category === 'review'
-      ? `<span class="note-cat-badge" style="background:#2d6b4a28;color:#1e4a32;">⭐ 리뷰</span>`
-      : `<span class="note-cat-badge" style="background:#1e4a3228;color:#1e4a32;">💬 요청사항</span>`;
+      ? `<span class="note-cat-badge" style="background:#fff3e0;color:#b8860b;">REVIEW</span>`
+      : `<span class="note-cat-badge" style="background:#e8f0fe;color:#3c5a9a;">REQUEST</span>`;
+
     const timeStr = fmtTime(note.created_at);
 
     const repliesHTML = replies.map(r => `
-      <div class="reply-card" style="background:${NOTE_COLORS.reply.bg}">
+      <div class="reply-card">
         <span class="reply-badge">↩ 답글</span>
         <div class="reply-text">${escHtml(r.content)}</div>
         <div class="note-footer">
           <span>${escHtml(r.nickname)} · ${fmtTime(r.created_at)}</span>
           <div class="note-actions">
-            <button class="edit-btn" onclick="openAuth(${r.id},'edit')">수정</button>
-            <button class="del-btn"  onclick="openAuth(${r.id},'delete')">삭제</button>
+            <button onclick="openAuth(${r.id},'edit')">수정</button>
+            <button class="del-btn" onclick="openAuth(${r.id},'delete')">삭제</button>
           </div>
         </div>
       </div>`).join('');
@@ -435,19 +545,18 @@ function renderNotes() {
       ? `<button class="reply-btn" onclick="openReplyModal(${note.id})">↩ 답글</button>` : '';
 
     return `<div class="note-group">
-      <div class="note" style="background:${col.bg};transform:rotate(${rot}deg)">
-        <div class="note-pin" style="background:${col.pin}"></div>
+      <div class="note" style="background:${col.bg}">
+        <div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:${col.pin};box-shadow:0 1px 3px rgba(0,0,0,0.3)"></div>
         ${badge}${stars}
         <div class="note-text">${escHtml(note.content)}</div>
         <div class="note-footer">
           <span>${escHtml(note.nickname)} · ${timeStr}</span>
           <div class="note-actions">
             ${replyBtn}
-            <button class="edit-btn" onclick="openAuth(${note.id},'edit')">수정</button>
-            <button class="del-btn"  onclick="openAuth(${note.id},'delete')">삭제</button>
+            <button onclick="openAuth(${note.id},'edit')">수정</button>
+            <button class="del-btn" onclick="openAuth(${note.id},'delete')">삭제</button>
           </div>
         </div>
-        <div class="note-fold"></div>
       </div>
       ${repliesHTML}
     </div>`;
@@ -519,11 +628,10 @@ async function submitNote() {
     const [n] = await insertRow({ category:selectedCat, content:text, stars:selectedCat==='review'?selectedStar:0, nickname:nick, password:pw, parent_id:null });
     allNotes.push(n);
     renderNotes(); updateCounts();
-    closeModal('writeModal');
-    resetWriteModal();
-    showToast('📌 메모가 붙었어요!');
+    closeModal('writeModal'); resetWriteModal();
+    showToast('메모가 등록됐어요');
   } catch(e) { showErr(err,'저장에 실패했어요. 다시 시도해주세요.'); }
-  finally { btn.disabled=false; btn.textContent='📌 붙이기'; }
+  finally { btn.disabled=false; btn.textContent='붙이기'; }
 }
 
 function resetWriteModal() {
@@ -572,15 +680,15 @@ async function submitReply() {
     allNotes.push(r);
     renderNotes();
     closeModal('replyModal');
-    showToast('💬 답글이 달렸어요!');
+    showToast('답글이 달렸어요');
   } catch(e) { showErr(err,'저장에 실패했어요.'); }
-  finally { btn.disabled=false; btn.textContent='💬 답글 달기'; }
+  finally { btn.disabled=false; btn.textContent='답글 달기'; }
 }
 
 /* ── Auth modal ── */
 function openAuth(id, action) {
   authTargetId = id; authAction = action;
-  document.getElementById('authTitle').textContent = action==='delete' ? '🗑 삭제 확인' : '✏️ 수정 확인';
+  document.getElementById('authTitle').textContent = action==='delete' ? '삭제 확인' : '수정 확인';
   document.getElementById('authPwInput').value = '';
   document.getElementById('authError').classList.remove('show');
   openModal('authModal');
@@ -602,9 +710,8 @@ async function confirmAuth() {
       await deleteRow(authTargetId);
       allNotes = allNotes.filter(n => n.id !== authTargetId && n.parent_id !== authTargetId);
       renderNotes(); updateCounts();
-      showToast('🗑 삭제됐어요.');
+      showToast('삭제됐어요');
     } catch(e) { showToast('삭제에 실패했어요.'); }
-
   } else {
     document.getElementById('editText').value = note.content;
     updateEditChar();
@@ -631,9 +738,9 @@ async function submitEdit() {
     if (idx !== -1) allNotes[idx].content = text;
     renderNotes();
     closeModal('editModal');
-    showToast('✏️ 수정됐어요!');
+    showToast('수정됐어요');
   } catch(e) { showErr(err,'수정에 실패했어요.'); }
-  finally { btn.disabled=false; btn.textContent='✏️ 수정 완료'; }
+  finally { btn.disabled=false; btn.textContent='수정 완료'; }
 }
 
 /* ── Toast ── */
