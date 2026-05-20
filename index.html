@@ -8,6 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 <style>
+@font-face {
+  font-family: 'DoolgiMayoGothic';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -32,7 +38,7 @@ body {
   justify-content: space-between; border-bottom: 3px solid var(--g4);
   gap: 12px; flex-shrink: 0; flex-wrap: wrap;
 }
-.board-title { font-size: 18px; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 7px; }
+.board-title { font-size: 20px; font-weight: normal; font-family: 'DoolgiMayoGothic', 'Noto Sans KR', sans-serif; letter-spacing: 2px; display: flex; align-items: center; gap: 7px; }
 .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
 .btn-write {
@@ -346,8 +352,8 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
 // ═══════════════════════════════════════════════
 //  ⚠️  아래 두 줄에 본인의 Supabase 정보를 입력하세요
 // ═══════════════════════════════════════════════
-const SUPABASE_URL = 'https://lvctpkhurifcbkypbmdz.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_hl-NSSO8S3hF_ePEvbiJHQ_vHmJpMQ9';
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
 // ═══════════════════════════════════════════════
 
 const API = `${SUPABASE_URL}/rest/v1/notes`;
