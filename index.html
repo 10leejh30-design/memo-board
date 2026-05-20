@@ -226,7 +226,7 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
 <body>
 
 <header class="board-header">
-  <div class="board-title">📌 익명 메모 보드</div>
+  <div class="board-title">📌 간식 리뷰 게시판</div>
   <div class="header-actions">
     <div class="cat-filter">
       <button class="cat-btn active" data-filter="all"     onclick="setFilter('all')">전체 <span class="count-badge" id="cnt-all">0</span></button>
@@ -352,8 +352,8 @@ textarea::placeholder { color: rgba(30,74,50,0.3); font-weight: 400; }
 // ═══════════════════════════════════════════════
 //  ⚠️  아래 두 줄에 본인의 Supabase 정보를 입력하세요
 // ═══════════════════════════════════════════════
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://lvctpkhurifcbkypbmdz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_hl-NSSO8S3hF_ePEvbiJHQ_vHmJpMQ9';
 // ═══════════════════════════════════════════════
 
 const API = `${SUPABASE_URL}/rest/v1/notes`;
