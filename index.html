@@ -17,16 +17,14 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --g1: #dde0d4; --g2: #a8bc96; --g3: #4e8060; --g4: #2d6b4a; --g5: #1e4a32;
-  --cream: #f4f6f0; --text: #1e4a32; --header: rgba(30,74,50,0.96);
+  --g1: #dde0d4; --g2: #f0eef8; --g3: #b8a0d8; --g4: #c9a0c0; --g5: #a07898;
+  --cream: #f4f6f0; --text: #1e4a32; --header: rgba(255,255,255,0.85);
 }
 
 body {
   height: 100vh; overflow: hidden;
-  background-color: var(--g2);
-  background-image:
-    radial-gradient(ellipse at 20% 30%, rgba(78,128,96,0.5) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 70%, rgba(45,107,74,0.4) 0%, transparent 50%);
+  background-color: #f5f0fb;
+  background-image: linear-gradient(135deg, #fde8f0 0%, #e8f0fd 40%, #fdf5e0 70%, #e8fdf0 100%);
   font-family: 'Noto Sans KR', sans-serif;
   display: flex; flex-direction: column;
 }
@@ -37,6 +35,9 @@ body {
   padding: 11px 22px; display: flex; align-items: center;
   justify-content: space-between; border-bottom: 3px solid var(--g4);
   gap: 12px; flex-shrink: 0; flex-wrap: wrap;
+  color: #444;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 .board-title { font-size: 20px; font-weight: normal; font-family: 'DoolgiMayoGothic', sans-serif; letter-spacing: 2px; display: flex; align-items: center; gap: 7px; }
 .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -365,9 +366,9 @@ const HDR = {
 };
 
 const NOTE_COLORS = {
-  review:  [{ bg:'#dde0d4', pin:'#2d6b4a' },{ bg:'#e8ece2', pin:'#1e4a32' },{ bg:'#d4dbc8', pin:'#4e8060' }],
-  request: [{ bg:'#c8ddd0', pin:'#1e4a32' },{ bg:'#b8d4c4', pin:'#2d6b4a' },{ bg:'#d0e4d8', pin:'#1e4a32' }],
-  reply:   { bg:'#eef2ea', pin:'#4e8060' }
+  review:  [{ bg:'#fde8f0', pin:'#e8a0b8' },{ bg:'#fdf0e8', pin:'#e8b89a' },{ bg:'#fdf8e8', pin:'#d4c090' }],
+  request: [{ bg:'#e8f0fd', pin:'#9ab0e8' },{ bg:'#ede8fd', pin:'#b09ae8' },{ bg:'#e8fdf5', pin:'#8ad4b8' }],
+  reply:   { bg:'#f8f8f8', pin:'#bbb' }
 };
 const ROTS = [-3,-1.5,0,1.5,3,-2,2,-1,1];
 
